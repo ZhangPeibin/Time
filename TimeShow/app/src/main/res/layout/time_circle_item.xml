@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="32dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="96dp"
+            android:layout_height="match_parent">
+
+            <com.timeshow.app.utils.CircleImgView
+                android:id="@+id/iconImg"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:src="@mipmap/default_person_avatar" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/user_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="20dp"
+                android:text="深海大石头"
+                android:textColor="#004198"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="4dp"
+                android:text="面朝大海,春暖花开"
+                android:textColor="#2c2c2c"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/grey_round"
+                android:drawableLeft="@mipmap/address"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:paddingBottom="1dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="8dp"
+                android:paddingTop="1dp"
+                android:text="一起越野活动"
+                android:textColor="#2c2c2c"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="武汉幼儿园"
+                android:textColor="#004198"
+                android:textSize="13sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="三分钟前"
+                    android:textColor="#81817d"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/good"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_toLeftOf="@+id/comment"
+                    android:src="@mipmap/good" />
+
+                <ImageView
+                    android:id="@+id/comment"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="8dp"
+                    android:src="@mipmap/comment" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/grey_round">
+
+                <ImageView
+                    android:id="@+id/lovers_icon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:src="@mipmap/load" />
+
+                <TextView
+                    android:id="@+id/lovers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/lovers_icon"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="3dp"
+                    android:text="张丕娥,杨宇等觉得很赞"
+                    android:textColor="#112079"
+                    android:textSize="13sp" />
+            </RelativeLayout>
+
+            <com.timeshow.app.utils.MyListView
+                android:id="@+id/active_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#cdcdcd"/>
+</LinearLayout>

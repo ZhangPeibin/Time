@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/navigation_header_container"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@mipmap/timg">
+            <TextView
+                android:id="@+id/profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:textColor="#2c2c2c"
+                android:textSize="16sp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"/>
+        </RelativeLayout>
+        <com.timeshow.app.utils.CircleImgView
+            android:id="@+id/iconImg"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="90dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/default_person_avatar" />
+
+        <TextView
+            android:id="@+id/nick_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#2c2c2c"
+            android:textSize="16sp"
+            android:layout_toLeftOf="@+id/iconImg"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="16dp"
+            android:layout_below="@+id/navigation_header_container"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"/>
+    </RelativeLayout>
+</LinearLayout>

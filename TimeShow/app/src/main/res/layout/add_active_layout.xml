@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/common_title_bar"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:scrollbars="none"
+        android:layout_marginRight="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/atitle"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="标题"
+                android:layout_marginTop="16dp"
+                android:paddingLeft="8dp"
+                android:background="@drawable/login_input_shape"
+                android:maxLines="1"
+                android:textSize="16sp"
+                android:singleLine="true" />
+
+
+            <EditText
+                android:id="@+id/profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="80dp"
+                android:gravity="left|top"
+                android:paddingTop="8dp"
+                android:hint="简介"
+                android:textSize="16sp"
+                android:maxLines="1"
+                android:layout_marginTop="8dp"
+                android:paddingLeft="8dp"
+                android:background="@drawable/login_input_shape"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/money"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="费用"
+                android:textSize="16sp"
+                android:maxLines="1"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp"
+                android:paddingLeft="8dp"
+                android:background="@drawable/login_input_shape"
+                android:singleLine="true" />
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="请选择城市"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:maxLines="1"
+                android:layout_marginTop="8dp"
+                android:paddingLeft="8dp"
+                android:background="@drawable/login_input_shape"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/details_address"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="请填写详细地址"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:maxLines="1"
+                android:layout_marginTop="8dp"
+                android:paddingLeft="8dp"
+                android:background="@drawable/login_input_shape"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="时间"
+                android:textSize="16sp"
+                android:gravity="center_vertical"
+                android:layout_marginTop="16dp"
+                android:paddingLeft="8dp"
+                android:background="@drawable/login_input_shape"
+                android:maxLines="1"
+                android:singleLine="true" />
+            <TextView
+                android:id="@+id/kind"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="分类"
+                android:textSize="16sp"
+                android:gravity="center_vertical"
+                android:layout_marginTop="16dp"
+                android:paddingLeft="8dp"
+                android:background="@drawable/login_input_shape"
+                android:maxLines="1"
+                android:singleLine="true" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="选择图片"
+                android:textSize="16sp"
+                android:gravity="center_vertical"
+                android:layout_marginTop="10dp"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@mipmap/upload_img"/>
+
+            <Button
+                android:id="@+id/email_sign_in_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="发布"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
+                android:layout_marginBottom="60dp"
+                android:background="@drawable/login_btn"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

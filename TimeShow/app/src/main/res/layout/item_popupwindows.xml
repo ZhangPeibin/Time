@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
+
+        <LinearLayout
+            android:id="@+id/maozi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@drawable/white_round"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/t_p"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:text="拍照"
+                android:textColor="#4A4A4A"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/common_divider" />
+
+            <TextView
+                android:id="@+id/c_p"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:text="从手机相册选择"
+                android:textColor="#4A4A4A"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/cancel_action"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@+id/maozi"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/white_round"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="#4A4A4A"
+            android:textSize="16sp" />
+    </RelativeLayout>
+</FrameLayout>
