@@ -2,7 +2,9 @@ package com.timeshow.app.activity;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,9 +13,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.timeshow.app.R;
 import com.timeshow.app.request.DaiKuanCoinService;
 import com.timeshow.app.request.ErrorCode;
@@ -21,6 +25,8 @@ import com.timeshow.app.request.GetCoinService;
 import com.timeshow.app.request.TransferGetCoinService;
 import com.timeshow.app.request.Urls;
 import com.timeshow.app.utils.SpUtils;
+import com.youth.banner.Banner;
+import com.youth.banner.loader.ImageLoader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +34,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -53,6 +61,16 @@ public class HomeFragment extends Fragment {
     public TextView giftText;
     @BindView(R.id.time)
     public TextView time;
+    @BindView(R.id.banner)
+    public Banner mBanner;
+
+    public static List<?> images=new ArrayList<String>(){
+        {
+            add("http://img.ui.cn/data/file/3/4/7/1118743.jpg?imageMogr2/auto-orient/format/jpg/strip/thumbnail/!1800%3E/quality/90/");
+            add("http://img.ui.cn/data/file/4/4/7/1118744.jpg?imageMogr2/auto-orient/format/jpg/strip/thumbnail/!1800%3E/quality/90/");
+            add("http://img.ui.cn/data/file/5/4/7/1118745.jpg?imageMogr2/auto-orient/format/jpg/strip/thumbnail/!1800%3E/quality/90/");
+        }
+    };
 
     public HomeFragment () {
         // Required empty public constructor
@@ -64,6 +82,11 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this,view);
         // Inflate the layout for this fragment
+        mBanner.setImageLoader(new GlideImageLoader());
+        //设置图片集合
+        mBanner.setImages(images);
+        //banner设置方法全部调用完毕时最后调用
+        mBanner.start();
         return view;
     }
 
@@ -86,7 +109,17 @@ public class HomeFragment extends Fragment {
             }
         },0,1000);
     }
+    public class GlideImageLoader extends ImageLoader {
+        @Override
+        public void displayImage(Context context, Object path, ImageView imageView) {
 
+            //Glide 加载图片简单用法
+            Glide.with(context).load(path).into(imageView);
+            //用fresco加载图片简单用法，记得要写下面的createImageView方法
+            Uri uri = Uri.parse((String) path);
+            imageView.setImageURI(uri);
+        }
+    }
 
 
     public String time(){

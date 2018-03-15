@@ -17,6 +17,10 @@
         android:orientation="vertical"
         tools:context="com.timeshow.app.activity.HomeFragment">
 
+        <com.youth.banner.Banner
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="120dp" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     @BindView(R.id.left_text)
     public TextView mLeftView;
+    @BindView(R.id.common_title)
+    public View commonTitle;
 
     private int mLastVisibleIndex = -1;
     private HomeFragment mHomeFragment = null;
@@ -57,20 +59,24 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 case R.id.navigation_home:
                     mTitle.setText("首页");
                     showIndex(0);
+                    commonTitle.setVisibility(View.GONE);
                     mLeftView.setVisibility(View.GONE);
                     return true;
                 case R.id.navigation_dashboard:
                     mTitle.setText("活动");
+                    commonTitle.setVisibility(View.VISIBLE);
                     mLeftView.setVisibility(View.VISIBLE);
                     showIndex(1);
                     return true;
                 case R.id.navigation_notifications:
                     mTitle.setText("时间圈");
+                    commonTitle.setVisibility(View.VISIBLE);
                     mLeftView.setVisibility(View.GONE);
                     showIndex(2);
                     return true;
                 case R.id.navigation_my:
                     mTitle.setText("我");
+                    commonTitle.setVisibility(View.VISIBLE);
                     mLeftView.setVisibility(View.GONE);
                     showIndex(3);
                     return true;
