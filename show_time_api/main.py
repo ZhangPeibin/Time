@@ -3,7 +3,7 @@
 import sys
 import sql
 import utils
-from flask import Flask, url_for, request, jsonify
+from flask import Flask, url_for, request, jsonify, render_template, redirect
 from werkzeug.utils import secure_filename
 from os import path, mkdir
 
@@ -17,6 +17,7 @@ if not path.exists(UPLOAD_FOLDER):
     mkdir(UPLOAD_FOLDER)
 
 app = Flask(__name__)
+app.debug = True
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 token_time = 60 * 1000 * 60 * 24
@@ -28,6 +29,23 @@ token_time = 60 * 1000 * 60 * 24
      -1 :   error 
      -2 :   no_login or no_register
 """
+
+
+@app.route("/weblogin", methods=['GET', 'POST'])
+def web_login():
+    error = None
+    if request.method == 'POST':
+        username = request.form['username']
+        passwd = request.form['password']
+        print username
+        print passwd
+        return redirect(url_for('list'))
+    return render_template("login.html")
+
+
+@app.route("/list")
+def list():
+    return '<h1>list</h1>'
 
 
 @app.route("/", methods=['GET', 'POST'])
