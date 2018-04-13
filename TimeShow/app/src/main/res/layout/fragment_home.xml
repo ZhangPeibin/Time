@@ -365,8 +365,8 @@
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textColor="#999999"
-            android:textSize="16sp" />
+            android:textColor="#e74c3e"
+            android:textSize="20sp" />
     </LinearLayout>
     </ScrollView>
 </LinearLayout>

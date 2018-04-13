@@ -3,9 +3,12 @@
 import sys
 import sql
 import utils
-from flask import Flask, url_for, request, jsonify, render_template, redirect
+from flask import Flask, url_for, request, jsonify, render_template, redirect, flash
 from werkzeug.utils import secure_filename
 from os import path, mkdir
+import os
+from models import User
+from flask_login import login_user, LoginManager, current_user, login_required
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -20,7 +23,18 @@ app = Flask(__name__)
 app.debug = True
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.secret_key = os.urandom(24)
 token_time = 60 * 1000 * 60 * 24
+
+login_manager = LoginManager()
+login_manager.session_protection = 'strong'
+login_manager.login_view = 'web_login'
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(user_id)
 
 
 """
@@ -35,17 +49,42 @@ token_time = 60 * 1000 * 60 * 24
 def web_login():
     error = None
     if request.method == 'POST':
-        username = request.form['username']
-        passwd = request.form['password']
-        print username
-        print passwd
-        return redirect(url_for('list'))
-    return render_template("login.html")
+        username = str(request.form['username'])
+        password = str(request.form['password'])
+        user_model = User(username)
+        if user_model.verify_password(password):
+            login_user(user_model, remember=True)
+            return redirect(url_for('loan_list'))
+        else:
+            error = u"登录账号或者密码错误"
+
+    return render_template("login.html", error=error)
 
 
 @app.route("/list")
-def list():
-    return '<h1>list</h1>'
+@login_required
+def loan_list():
+    db = sql.UserHelper()
+    loans = db.get_loan("1")
+    if len(loans) == 0:
+        return render_template("loan.html", loans=[])
+
+    return render_template("loan.html", loans=loans)
+
+
+@app.route("/loansubmit")
+@login_required
+def loan_submit():
+    loan_id = request.args['id']
+    db = sql.UserHelper()
+    db.finish_loan(loan_id)
+
+    need_deal_loan = db.get_loan_by_id(loan_id)[0]
+    phone = need_deal_loan[1]
+    money = need_deal_loan[2]
+    finish_user_loan(phone, money)
+    loans = db.get_loan("1")
+    return render_template("loan.html", loans=loans)
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -180,19 +219,38 @@ def daikuan_user_coin():
         resp = jsonify(error)
         return resp
     user = user[0]
-    print user
+    phone = user[0]
     blue_coin = float(user[4])
     orange_coin = float(user[5])
     if blue_coin is None:
         blue_coin = 0.00
     if orange_coin is None:
         orange_coin = 0.00
-    blue_coin = blue_coin + 30.00
-    orange_coin = orange_coin + 30.00
-    db.save_user_coin(token, blue_coin, orange_coin)
-    db.save_transaction_history(user[0], u"时间贷款", 30, 1, url)
-    res = {"status": 0, "blue_coin": blue_coin, "orange_coin": orange_coin, "message": u"贷款成功"}
+    db.save_loan(phone, "30")
+    res = {"status": 0, "blue_coin": blue_coin, "orange_coin": orange_coin, "message": u"申请贷款成功,审核通过后到账"}
     return jsonify(res)
+
+
+# this is not api
+def finish_user_loan(loan_phone, loan_money):
+    db = sql.UserHelper()
+    user = db.get_user(str(loan_phone))
+    if len(user) == 0:
+        error = {"status": -2, "message": u"用户不存在,请重新登录"}
+        resp = jsonify(error)
+        return resp
+    user = user[0]
+    print user
+    token = user[2]
+    blue_coin = float(user[4])
+    orange_coin = float(user[5])
+    if blue_coin is None:
+        blue_coin = 0.00
+    if orange_coin is None:
+        orange_coin = 0.00
+    blue_coin = blue_coin + float(loan_money)
+    db.save_user_coin(token, blue_coin, orange_coin)
+    db.save_transaction_history(user[0], u"时间贷款", 30, 1, None)
 
 
 @app.route("/user/history", methods=['GET'])
@@ -293,8 +351,8 @@ def user_transfer():
         orange_coin = orange_coin
         db.save_user_coin(token, 0.0, orange_coin)
 
-    db.save_transaction_history(phone, str(phone)+u"转账给"+str(to_phone), to_money, 0, None)
-    db.save_transaction_history(to_phone, str(to_phone) + u"从"+str(phone)+u"入账", to_money, 1, None)
+    db.save_transaction_history(phone, str(phone) + u"转账给" + str(to_phone), to_money, 0, None)
+    db.save_transaction_history(to_phone, str(to_phone) + u"从" + str(phone) + u"入账", to_money, 1, None)
 
     to_user = to_user[0]
     to_blue_coin = float(to_user[4])
@@ -328,15 +386,15 @@ def user_pay():
         resp = jsonify(error)
         return resp
 
-    if "reason" not in request.args:
-        error = {"status": -1, "message": u"非法请求(未找到reason字段)"}
+    if "id" not in request.args:
+        error = {"status": -1, "message": u"非法请求(未找到id字段)"}
         resp = jsonify(error)
         return resp
 
     token = request.args['token']
     to_phone = request.args['phone']
     to_money = float(request.args['money'])
-    reason = request.args['reason']
+    active_id = request.args['id']
     db = sql.UserHelper()
     user = db.get_user_by_token(str(token))
     if len(user) == 0:
@@ -346,10 +404,64 @@ def user_pay():
     user = user[0]
     phone = user[0]
     if phone == to_phone:
-        error = {"status": -1, "message": u"不能自己给自己付时间"}
+        error = {"status": -1, "message": u"不能自己向自己请求付时间"}
         resp = jsonify(error)
         return resp
 
+    to_user = db.get_user(to_phone)
+    if len(to_user) == 0:
+        error = {"status": -1, "message": u"支付的用户不存在"}
+        resp = jsonify(error)
+        return resp
+
+    db.save_active_pay_request(active_id, phone, to_phone, to_money)
+    db.update_active_status(active_id, "2")
+
+    error = {"status": 0, "message": u"发起收款请求成功,对方付款后会直接将时间打到你的账户"}
+    resp = jsonify(error)
+    return resp
+
+
+@app.route("/active/pay", methods = ['GET'])
+def pay_for():
+    if "token" not in request.args:
+        error = {"status": -1, "message": u"非法请求(未找到token字段)"}
+        resp = jsonify(error)
+        return resp
+
+    if "phone" not in request.args:
+        error = {"status": -1, "message": u"非法请求(未找到phone字段)"}
+        resp = jsonify(error)
+        return resp
+
+    if "money" not in request.args:
+        error = {"status": -1, "message": u"非法请求(未找到money字段)"}
+        resp = jsonify(error)
+        return resp
+
+    if "id" not in request.args:
+        error = {"status": -1, "message": u"非法请求(未找到id字段)"}
+        resp = jsonify(error)
+        return resp
+
+    token = request.args['token']
+    money = float(request.args['money'])
+    active_id = request.args['id']
+    db = sql.UserHelper()
+    user = db.get_user_by_token(str(token))
+    if len(user) == 0:
+        error = {"status": -2, "message": u"用户不存在,请重新登录"}
+        resp = jsonify(error)
+        return resp
+    user = user[0]
+    phone = user[0]
+    active_request = db.get_active_pa_request(phone)
+    if len(active_request) == 0:
+        error = {"status": -2, "message": u"活动的支付信息未找到"}
+        resp = jsonify(error)
+        return resp
+    to_phone = active_request[0][2]
+    db.update_active_status(active_id, "3")
     to_user = db.get_user(to_phone)
     if len(to_user) == 0:
         error = {"status": -1, "message": u"支付的用户不存在"}
@@ -365,15 +477,15 @@ def user_pay():
     if orange_coin is None:
         orange_coin = 0.0
 
-    if blue_coin + orange_coin < to_money:
+    if blue_coin + orange_coin < money:
         error = {"status": -1, "message": u"支付时间超出限额"}
         resp = jsonify(error)
         return resp
-    if blue_coin > to_money:
-        blue_coin = blue_coin - to_money
+    if blue_coin > money:
+        blue_coin = blue_coin - money
         db.save_user_coin(token, blue_coin, orange_coin)
-    elif blue_coin < to_money:
-        orange_coin = orange_coin + blue_coin - to_money
+    elif blue_coin < money:
+        orange_coin = orange_coin + blue_coin - money
         db.save_user_coin(token, 0.0, orange_coin)
         blue_coin = 0.0
     else:
@@ -381,8 +493,8 @@ def user_pay():
         orange_coin = orange_coin
         db.save_user_coin(token, 0.0, orange_coin)
 
-    db.save_transaction_history(phone, reason+u"活动支出", to_money, 0, None)
-    db.save_transaction_history(to_phone, reason+u"活动收入", to_money, 1, None)
+    db.save_transaction_history(phone,  u"活动支出", money, 0, None)
+    db.save_transaction_history(to_phone, u"活动收入", money, 1, None)
 
     to_user = to_user[0]
     to_blue_coin = float(to_user[4])
@@ -393,7 +505,7 @@ def user_pay():
     if to_orange_coin is None:
         to_orange_coin = 0.00
 
-    db.save_user_coin(to_user[2], to_blue_coin + to_money, to_orange_coin)
+    db.save_user_coin(to_user[2], to_blue_coin + money, to_orange_coin)
     error = {"status": 0, "message": u"支付时间成功", "blue_coin": blue_coin, "orange_coin": orange_coin}
     resp = jsonify(error)
     return resp
@@ -477,8 +589,8 @@ def user_get_money():
         orange_coin = orange_coin
         db.save_user_coin(from_token, blue_coin, orange_coin)
 
-    db.save_transaction_history(phone, u"二维码收款:"+reason, from_money, 1, url)
-    db.save_transaction_history(from_phone, u"二维码付款:"+reason, from_money, 0, url)
+    db.save_transaction_history(phone, u"二维码收款:" + reason, from_money, 1, url)
+    db.save_transaction_history(from_phone, u"二维码付款:" + reason, from_money, 0, url)
 
     to_blue_coin = float(user[4])
     to_orange_coin = float(user[5])
@@ -556,8 +668,9 @@ def get_active():
             time = value[7]
             url = value[8]
             active_type = value[9]
+            status = value[11]
             list_item = {"id": id, "phone": phone, "title": title, "profile": profile, "cost": cost, "address": address,
-                         "detail": detail, "time": time, "url": url, "type": active_type}
+                         "detail": detail, "time": time, "url": url, "type": active_type, "status" : status}
             active_list.append(list_item)
         res = {"status": 0, "message": "获取成功", "list": active_list}
         print res
@@ -607,7 +720,7 @@ def upload_file():
                 file_path_list = list(file_path)  # 将字符串转换为列表，列表的每一个元素为一个字符
                 file_path_list[0] = ''  # 修改字符串的第1个字符为z
                 file_path = ''.join(file_path_list)  # 将列表重新连接为字符串
-                res = {"status": 0, "message": "上传成功", "url": NET_ADDRESS+file_path}
+                res = {"status": 0, "message": "上传成功", "url": NET_ADDRESS + file_path}
                 return jsonify(res)
         else:
             res = {"status": -1, "message": "上传的文件key错误,请使用image"}

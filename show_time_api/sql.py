@@ -6,10 +6,12 @@ import utils
 db_name = "st.db"
 user_table = "user"
 transaction_table = "transcation_history"
+active_request_table = "active_pay_request"
 active_table = "actives"
 friend_table = "friend"
 like_table = "like"
 comment_table = "comment_table"
+loan_table = "loan_table"
 
 
 class User_column:
@@ -44,6 +46,20 @@ class Transaction_column:
     URL = "url"
 
 
+# 付款请求
+class Active_pay_request_column:
+    def __init__(self):
+        pass
+
+    ACTIVE_ID = "id"
+    # 支付方
+    PHONE = "phone"
+    # 接收方
+    TO_PHONE = "to_phone"
+    # money
+    MONEY = "money"
+
+
 class Active_column:
 
     def __init__(self):
@@ -60,6 +76,19 @@ class Active_column:
     URL = "url"
     TYPE = "type"
     POST_TIME = "post_time"
+    # 状态  1:代表正常活动 2:代表活动已经完成,等待付款 3:活动付款完成
+    STATUS = "status"
+
+
+class Loan_column:
+
+    def __init__(self):
+        pass
+
+    ID = "id"
+    PHONE = "phone"
+    MONEY = "money"
+    STATUS = "status"
 
 
 class Active_like_column:
@@ -109,11 +138,20 @@ class SqlHelper(object):
 
         self.__conn__.execute('''CREATE TABLE IF NOT EXISTS %s  \
                                 (%s integer PRIMARY KEY autoincrement ,
-                                 %s TEXT, %s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT)''' %
-                              (active_table, Active_column.ID, Active_column.PHONE, Active_column.TITLE,
-                               Active_column.PROFILE, Active_column.COST, Active_column.ADDRESS,
-                               Active_column.DETAILS_ADDRESS, Active_column.TIME
-                               , Active_column.URL, Active_column.TYPE, Active_column.POST_TIME))
+                                 %s TEXT, %s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,%s TEXT,
+                                 %s TEXT)''' % (active_table,
+                                                Active_column.ID, Active_column.PHONE, Active_column.TITLE,
+                                                Active_column.PROFILE, Active_column.COST, Active_column.ADDRESS,
+                                                Active_column.DETAILS_ADDRESS, Active_column.TIME,
+                                                Active_column.URL, Active_column.TYPE, Active_column.POST_TIME,
+                                                Active_column.STATUS))
+
+        self.__conn__.execute('''CREATE TABLE IF NOT EXISTS %s  \
+                                        (%s TEXT, %s TEXT, %s TEXT, %s TEXT)''' % (active_request_table,
+                                                                                   Active_pay_request_column.ACTIVE_ID,
+                                                                                   Active_pay_request_column.PHONE,
+                                                                                   Active_pay_request_column.TO_PHONE,
+                                                                                   Active_pay_request_column.MONEY))
 
         self.__conn__.execute('''CREATE TABLE IF NOT EXISTS %s  \
                                 (%s TEXT, %s TEXT)''' % (friend_table, Friend_column.PHONE, Friend_column.R_PHONE))
@@ -129,8 +167,36 @@ class SqlHelper(object):
                                                                           Active_comment_column.COMMENT_PEOPLE,
                                                                           Active_comment_column.CONTENT))
 
+        self.__conn__.execute('''CREATE TABLE IF NOT EXISTS %s  \
+                                               (%s integer PRIMARY KEY autoincrement ,
+                                               %s TEXT, %s TEXT, %s TEXT)''' % (loan_table, Loan_column.ID,
+                                                                                Loan_column.PHONE,
+                                                                                Loan_column.MONEY, Loan_column.STATUS))
+
 
 class UserHelper(SqlHelper):
+
+    def save_loan(self, phone, money):
+        self.__conn__.execute('INSERT INTO %s (%s,%s,%s, %s) VALUES (?,?,?,?)'
+                              % (loan_table, Loan_column.ID, Loan_column.PHONE, Loan_column.MONEY, Loan_column.STATUS),
+                              (None, phone, money, '1'))
+        self.__conn__.commit()
+
+    def get_loan(self, status):
+        cur = self.__conn__.execute("SELECT * from %s  where %s = '%s'" %
+                                    (loan_table, Loan_column.STATUS, status))
+        return list(cur)
+
+    def get_loan_by_id(self, loan_id):
+        cur = self.__conn__.execute("SELECT * from %s  where %s = '%s'" %
+                                    (loan_table, Loan_column.ID, loan_id))
+        return list(cur)
+
+    def finish_loan(self, loan_id):
+        self.__conn__.execute("UPDATE  %s set %s = '%s' where %s like '%s' "
+                              % (loan_table, Loan_column.STATUS, "0",
+                                 Loan_column.ID, loan_id))
+        self.__conn__.commit()
 
     def save_user(self, phone, password, token, time):
         self.__conn__.execute('INSERT INTO %s (%s,%s,%s,%s,%s,%s) VALUES (?,?,?,?,?,?)' \
@@ -195,14 +261,36 @@ class UserHelper(SqlHelper):
                                     (friend_table, Friend_column.PHONE, phone))
         return list(cur)
 
+    def save_active_pay_request(self, active_id, phone, to_phone, money):
+        sql = 'INSERT INTO %s (%s,%s,%s,%s) VALUES (?,?,?,?)' % (active_request_table,
+                                                                 Active_pay_request_column.ACTIVE_ID,
+                                                                 Active_pay_request_column.PHONE,
+                                                                 Active_pay_request_column.TO_PHONE,
+                                                                 Active_pay_request_column.MONEY)
+        self.__conn__.execute(sql, (active_id, phone, to_phone, money))
+        self.__conn__.commit()
+
+    def get_active_pa_request(self, phone):
+        cur = self.__conn__.execute("SELECT * from %s where %s like '%s'" %
+                                    (active_request_table, Active_pay_request_column.PHONE, phone))
+        return list(cur)
+
     def save_active(self, phone, title, profile, cost, address, details_address, time, url, active_type):
-        self.__conn__.execute('INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (?,?,?,?,?,?,?,?,?,?,?)' \
+        self.__conn__.execute('INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)' \
                               % (active_table, Active_column.ID, Active_column.PHONE, Active_column.TITLE,
                                  Active_column.PROFILE, Active_column.COST, Active_column.ADDRESS,
                                  Active_column.DETAILS_ADDRESS, Active_column.TIME
-                                 , Active_column.URL, Active_column.TYPE, Active_column.POST_TIME),
+                                 , Active_column.URL, Active_column.TYPE, Active_column.POST_TIME,
+                                 Active_column.STATUS),
                               (None, phone, title, profile,
-                               cost, address, details_address, time, url, active_type, str(utils.get_current_time())))
+                               cost, address, details_address, time, url, active_type, str(utils.get_current_time()),
+                               "1"))
+        self.__conn__.commit()
+
+    def update_active_status(self, active_id, status):
+        self.__conn__.execute("UPDATE  %s set %s = %s where %s like '%s' " \
+                              % (active_table, Active_column.STATUS, status,
+                                 Active_column.ID, active_id))
         self.__conn__.commit()
 
     def get_active(self, active_type):
@@ -212,6 +300,15 @@ class UserHelper(SqlHelper):
         else:
             cur = self.__conn__.execute("SELECT * from %s where %s like '%s'" %
                                         (active_table, Active_column.TYPE, active_type))
+        return list(cur)
+
+    def get_active_with_status(self, active_type, status):
+        if int(active_type) == 0:
+            cur = self.__conn__.execute("SELECT * from %s where %s like '%s'" %
+                                        active_table, Active_column.STATUS, status)
+        else:
+            cur = self.__conn__.execute("SELECT * from %s where %s like '%s' and %s like '%s'" %
+                                        (active_table, Active_column.TYPE, active_type, Active_column.STATUS, status))
         return list(cur)
 
     def get_active_with_area(self, active_type, city):

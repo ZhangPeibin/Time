@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.timeshow.app.R;
 import com.timeshow.app.model.ActiveModel;
 import com.timeshow.app.model.HistoryModel;
+import com.timeshow.app.utils.SpUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,7 +62,13 @@ public class ActiveAdapter extends BaseAdapter {
         ImageView i = (ImageView) view.findViewById(R.id.image);
         ActiveModel activeModel = mHistoryModels.get(position);
         Glide.with(mContext).asBitmap().load(activeModel.url).into(i);
-        title.setText(activeModel.title);
+        if ("2".equals(activeModel.status) && activeModel.phone.equals(SpUtils.get_str(mContext,"phone")) ){
+            title.setText(activeModel.title+"----(待付时间)");
+        }else if ( "3".equals(activeModel.status )&& activeModel.phone.equals(SpUtils.get_str(mContext,"phone")) ){
+            title.setText(activeModel.title+"----(已支付)");
+        }else{
+            title.setText(activeModel.title);
+        }
         profile.setText(activeModel.profile);
         cost.setText("费用: "+activeModel.cost+"时间");
         if ( activeModel.detail == null ){

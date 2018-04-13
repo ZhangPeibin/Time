@@ -25,6 +25,7 @@ import com.timeshow.app.adapter.ActiveAdapter;
 import com.timeshow.app.adapter.HistoryAdapter;
 import com.timeshow.app.model.ActiveModel;
 import com.timeshow.app.request.GetActiveService;
+import com.timeshow.app.request.PayActiveCoinService;
 import com.timeshow.app.request.PayCoinService;
 import com.timeshow.app.request.PostActiveService;
 import com.timeshow.app.request.TransferCoinService;
@@ -184,15 +185,21 @@ public class ActiveFragment extends Fragment implements TabLayout.OnTabSelectedL
         ActiveModel activeModel = (ActiveModel) mActiveAdapter.getItem(position);
         if ( activeModel != null ) {
             String phone = SpUtils.get_str(getActivity(), "phone");
-            if ( activeModel.phone != null && activeModel.phone.equals(phone) ) {
-                Toast.makeText(getActivity(), "不能参加自己发布的活动", Toast.LENGTH_SHORT).show();
-            } else {
-                payfor(activeModel.phone, activeModel.cost);
+            if ( "2".equals(activeModel.status) ){
+                if (activeModel.phone.equals(phone)){
+                    paypay(activeModel.phone, activeModel.cost,activeModel.id);
+                }
+            }else{
+                if (activeModel.phone.equals(phone)){
+                    Toast.makeText(getActivity(), "不能参加自己发布的活动", Toast.LENGTH_SHORT).show();
+                }else{
+                    payfor(activeModel.phone, activeModel.cost, activeModel.id);
+                }
             }
         }
     }
 
-    private void payfor (final String phone, final String cost) {
+    private void paypay (final String phone, final String cost, final String id) {
         new MaterialDialog.Builder(getActivity())
                 .title("支付提示")
                 .content("确定向" + phone + "用户支付" + cost + "时间")
@@ -201,12 +208,63 @@ public class ActiveFragment extends Fragment implements TabLayout.OnTabSelectedL
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick (@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        pay(phone, cost);
+                        paypayRequest(phone, cost, id);
                     }
                 }).show();
     }
 
-    private void pay (String phone, String cost) {
+    private void paypayRequest (String phone, String cost, String id) {
+        final MaterialDialog dialog  = new MaterialDialog.Builder(getActivity())
+                .content("正在请求中...")
+                .progress(true, 0)
+                .progressIndeterminateStyle(false)
+                .show();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Urls.BASE_URL).addConverterFactory(ScalarsConverterFactory.create()).build();
+        PayActiveCoinService loginRequest = retrofit.create(PayActiveCoinService.class);
+        Call<String> request = loginRequest.transfer(SpUtils.get_str(getActivity(), "token"), phone, cost, id);
+        request.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse (Call<String> call, Response<String> response) {
+                dialog.dismiss();
+                String result = response.body();
+                if ( result == null ) {
+                    Toast.makeText(getActivity(), "服务器异常", Toast.LENGTH_SHORT).show();
+                } else {
+                    try {
+                        JSONObject j = new JSONObject(result);
+                        int status = j.optInt("status");
+                        String message = j.optString("message");
+                        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure (Call<String> call, Throwable t) {
+                dialog.dismiss();
+                Toast.makeText(getActivity(), "服务器异常", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void payfor (final String phone, final String cost, final String id) {
+        new MaterialDialog.Builder(getActivity())
+                .title("支付提示")
+                .content("确定向" + phone + "用户收" + cost + "时间")
+                .positiveText("确定")
+                .negativeText("否")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick (@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        pay(phone, cost, id);
+                    }
+                }).show();
+    }
+
+    private void pay (String phone, String cost, String id) {
         final MaterialDialog dialog  = new MaterialDialog.Builder(getActivity())
                     .content("正在请求中...")
                     .progress(true, 0)
@@ -215,7 +273,7 @@ public class ActiveFragment extends Fragment implements TabLayout.OnTabSelectedL
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Urls.BASE_URL).addConverterFactory(ScalarsConverterFactory.create()).build();
         PayCoinService loginRequest = retrofit.create(PayCoinService.class);
-        Call<String> request = loginRequest.transfer(SpUtils.get_str(getActivity(), "token"), phone, cost);
+        Call<String> request = loginRequest.transfer(SpUtils.get_str(getActivity(), "token"), phone, cost, id);
         request.enqueue(new Callback<String>() {
             @Override
             public void onResponse (Call<String> call, Response<String> response) {

@@ -15,4 +15,5 @@ public class ActiveModel {
     public String url;
     public String phone;
     public String good;
+    public String status;
 }

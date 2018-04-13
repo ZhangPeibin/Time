@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    {% block head %}
     <meta charset="utf-8">
     <title>Slick Login</title>
-    <meta name="description" content="slick Login">
+    <meta name="description" content="时间银行">
     <meta name="author" content="Webdesigntuts+">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="http://www.modernizr.com/downloads/modernizr-latest.js"></script>
     <script type="text/javascript" src="placeholder.js"></script>
+    {% endblock %}
 </head>
-
 <body>
+{% block body %}
     <form id="slick-login" action="{{ url_for('web_login')}}" method="post">
         <label for="username">username</label><input type="text" name="username" class="placeholder" placeholder="登录账号">
         <label for="password">password</label><input type="password" name="password" class="placeholder" placeholder="登录密码">
         <input type="submit" value="登录">
     </form>
+{% endblock %}
 </body>
 
 </html>

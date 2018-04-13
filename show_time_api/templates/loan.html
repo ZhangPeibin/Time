@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="utf-8">
+    <title>Slick Login</title>
+    <meta name="description" content="时间银行">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/loan.css') }}"/>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript" src="placeholder.js"></script>
+
+    <script type="text/javascript">
+            function geturl(id){
+                var click_id = id
+                window.location.href= "/loansubmit?id="+click_id
+            }
+
+    </script>
+    {% endblock %}
+</head>
+<body>
+{% block body %}
+<ul id="slick-list">
+    <li><h1 style="text">ID&nbsp;&nbsp;贷款人&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;贷款金额</h1></li>
+    {% for loan in loans %}
+    <li>
+        <h1>{{ loan[0] }}&nbsp;&nbsp;{{ loan[1] }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ loan[2] }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button"
+                    onclick="geturl({{loan[0]}})">通过
+            </button>
+        </h1>
+    </li>
+    {% endfor %}
+</ul>
+
+<!--{% endblock %}-->
+
+</body>
+</html>
