@@ -24,6 +24,8 @@ import com.lljjcoder.style.citylist.CityListSelectActivity;
 import com.lljjcoder.style.citylist.bean.CityInfoBean;
 import com.lljjcoder.style.citylist.utils.CityListLoader;
 import com.timeshow.app.R;
+import com.timeshow.app.TimeApplication;
+import com.timeshow.app.model.ActiveModel;
 import com.timeshow.app.request.ErrorCode;
 import com.timeshow.app.request.PostActiveService;
 import com.timeshow.app.request.UploadImageService;
@@ -86,6 +88,10 @@ public class AddActiveActivity extends Activity implements PhotoObtainHelper.OnB
 
     PhotoObtainHelper mPhotoObtainHelper;
 
+    //类型, 0代表新曾, 1代表编辑
+    private int mType = 0;
+    private String mId = null;
+
     @Override
     protected void onCreate (@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +102,20 @@ public class AddActiveActivity extends Activity implements PhotoObtainHelper.OnB
         mPhotoObtainHelper = new PhotoObtainHelper();
         mPhotoObtainHelper.setCrop(false);
         CityListLoader.getInstance().loadCityData(this);
+
+        if ( getIntent().hasExtra("type") ){
+            mType = getIntent().getIntExtra("type",0);
+        }
+
+        if ( mType == 1 ){
+            ActiveModel activeModel = TimeApplication.getInstance().getActiveModel();
+            if ( activeModel != null ){
+                title.setText(activeModel.title);
+                profileView.setText(activeModel.profile);
+                costView.setText(activeModel.cost);
+                mId = activeModel.id;
+            }
+        }
     }
 
     @OnClick ( R.id.image )
@@ -168,7 +188,7 @@ public class AddActiveActivity extends Activity implements PhotoObtainHelper.OnB
             return;
         }
 
-        TransferCoinTask transferCoinTask = new TransferCoinTask(
+        TransferCoinTask transferCoinTask = new TransferCoinTask(mId,
                 title, profile, cost, adddress,detailadddress, time, url,(kind+1)+""
         );
         transferCoinTask.execute();
@@ -259,8 +279,13 @@ public class AddActiveActivity extends Activity implements PhotoObtainHelper.OnB
         private String url;
         private String kind;
         private String details;
+        private String id;
 
-        public TransferCoinTask (String title, String profile, String cost, String address,String details, String time, String url,String kind) {
+        public TransferCoinTask (String id, String title,
+                                 String profile,
+                                 String cost,
+                                 String address,String details, String time, String url,String kind) {
+            this.id = id;
             this.title = title;
             this.profile = profile;
             this.cost = cost;
@@ -277,7 +302,7 @@ public class AddActiveActivity extends Activity implements PhotoObtainHelper.OnB
                     .baseUrl(Urls.BASE_URL).addConverterFactory(ScalarsConverterFactory.create()).build();
             PostActiveService loginRequest = retrofit.create(PostActiveService.class);
             Call<String> request = loginRequest.add(SpUtils.get_str(getApplicationContext(), "token"),
-                    title, profile, cost, address,details, time, url,kind);
+                    title, profile, cost, address,details, time, url,kind,mId);
             try {
                 Response<String> response = request.execute();
                 return response.body();

@@ -287,6 +287,22 @@ class UserHelper(SqlHelper):
                                "1"))
         self.__conn__.commit()
 
+    def update_active(self, active_id, phone, title, profile, cost, address, details_address, time, url, active_type):
+
+        self.__conn__.execute("DELETE FROM %s where %s like '%s' " % (active_table, Active_column.ID, active_id))
+        self.__conn__.commit()
+
+        self.__conn__.execute('INSERT INTO %s (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)' \
+                              % (active_table, Active_column.ID, Active_column.PHONE, Active_column.TITLE,
+                                 Active_column.PROFILE, Active_column.COST, Active_column.ADDRESS,
+                                 Active_column.DETAILS_ADDRESS, Active_column.TIME
+                                 , Active_column.URL, Active_column.TYPE, Active_column.POST_TIME,
+                                 Active_column.STATUS),
+                              (active_id, phone, title, profile,
+                               cost, address, details_address, time, url, active_type, str(utils.get_current_time()),
+                               "1"))
+        self.__conn__.commit()
+
     def update_active_status(self, active_id, status):
         self.__conn__.execute("UPDATE  %s set %s = %s where %s like '%s' " \
                               % (active_table, Active_column.STATUS, status,

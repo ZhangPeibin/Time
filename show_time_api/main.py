@@ -621,6 +621,7 @@ def save_active():
     time = request.args['time']
     url = request.args['url']
     active_type = request.args['kind']
+    active_id = request.args['id']
     db = sql.UserHelper()
     user = db.get_user_by_token(str(token))
     if len(user) == 0:
@@ -629,9 +630,14 @@ def save_active():
         return resp
     user = user[0]
     phone = user[0]
-    db.save_active(phone, title, profile, cost, address, detail_address, time, url, active_type)
-    error = {"status": 0, "message": u"添加活动成功"}
-    resp = jsonify(error)
+    if active_id is not None:
+        db.update_active(active_id, phone, title, profile, cost, address, detail_address, time, url, active_type)
+        error = {"status": 0, "message": u"添加活动成功"}
+        resp = jsonify(error)
+    else:
+        db.save_active(phone, title, profile, cost, address, detail_address, time, url, active_type)
+        error = {"status": 0, "message": u"更新活动成功"}
+        resp = jsonify(error)
     return resp
 
 
@@ -764,6 +770,7 @@ def user_add_friend():
         return resp
 
     db.save_friend(phone, rphone)
+    db.save_friend(phone,phone)
 
     error = {"status": 0, "message": u"添加好友成功"}
     resp = jsonify(error)

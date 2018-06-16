@@ -1,6 +1,7 @@
 package com.timeshow.app.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.timeshow.app.R;
+import com.timeshow.app.TimeApplication;
+import com.timeshow.app.activity.AddActiveActivity;
 import com.timeshow.app.model.ActiveModel;
 import com.timeshow.app.model.HistoryModel;
 import com.timeshow.app.utils.SpUtils;
@@ -24,7 +27,7 @@ import java.util.List;
  * Created by peibin on 18-2-14.
  */
 
-public class ActiveAdapter extends BaseAdapter {
+public class ActiveAdapter extends BaseAdapter implements View.OnClickListener {
 
     private LayoutInflater mLayoutInflater;
     private List<ActiveModel> mHistoryModels ;
@@ -59,6 +62,7 @@ public class ActiveAdapter extends BaseAdapter {
         TextView cost = (TextView) view.findViewById(R.id.cost);
         TextView time = (TextView) view.findViewById(R.id.time);
         TextView address = (TextView) view.findViewById(R.id.address);
+        TextView edit = (TextView) view.findViewById(R.id.edit);
         ImageView i = (ImageView) view.findViewById(R.id.image);
         ActiveModel activeModel = mHistoryModels.get(position);
         Glide.with(mContext).asBitmap().load(activeModel.url).into(i);
@@ -69,6 +73,16 @@ public class ActiveAdapter extends BaseAdapter {
         }else{
             title.setText(activeModel.title);
         }
+
+        if ( !activeModel.phone.equals(SpUtils.get_str(mContext,"phone")) ){
+            edit.setVisibility(View.GONE);
+            edit.setOnClickListener(null);
+        }else{
+            edit.setVisibility(View.VISIBLE);
+            edit.setTag(activeModel);
+            edit.setOnClickListener(this);
+        }
+
         profile.setText(activeModel.profile);
         cost.setText("费用: "+activeModel.cost+"时间");
         if ( activeModel.detail == null ){
@@ -95,5 +109,18 @@ public class ActiveAdapter extends BaseAdapter {
     public void clear () {
         mHistoryModels.clear();
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClick (View v) {
+        if ( v.getId() == R.id.edit ){
+            ActiveModel activeModel = (ActiveModel) v.getTag();
+            TimeApplication.getInstance().setActiveModel(activeModel);
+            Intent intent = new Intent(mContext,AddActiveActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("type",1);
+            mContext.startActivity(intent);
+
+        }
     }
 }

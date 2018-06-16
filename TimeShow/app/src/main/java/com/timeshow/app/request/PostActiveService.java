@@ -18,5 +18,6 @@ public interface PostActiveService {
                       @Query ( "details" ) String details,
                       @Query ( "time" ) String time,
                       @Query ( "url" ) String url,
-                      @Query ( "kind" ) String kind);
+                      @Query ( "kind" ) String kind,
+                      @Query ( "id" ) String id);
 }

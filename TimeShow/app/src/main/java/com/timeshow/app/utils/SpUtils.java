@@ -30,6 +30,16 @@ public class SpUtils {
         return sharedPreferences.getLong(key,0L);
     }
 
+    public static void save_bool(Context context,String key,boolean value){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("config",Context.MODE_APPEND);
+        sharedPreferences.edit().putBoolean(key,value).apply();
+    }
+
+    public static boolean get_bool(Context context,String key){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("config",Context.MODE_APPEND);
+        return sharedPreferences.getBoolean(key,false);
+    }
+
     public static void clear (Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("config",Context.MODE_APPEND);
         sharedPreferences.edit().clear().commit();
