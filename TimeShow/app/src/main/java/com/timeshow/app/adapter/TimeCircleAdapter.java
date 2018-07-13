@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.timeshow.app.GlideApp;
 import com.timeshow.app.R;
 import com.timeshow.app.activity.TimeCircleFragment;
 import com.timeshow.app.model.ActiveModel;
@@ -72,7 +73,8 @@ public class TimeCircleAdapter extends BaseAdapter {
         final FriendActiveModel activeModel = (FriendActiveModel) getItem(position);
 
         Glide.with(mContext).asBitmap().load(activeModel.url).into(image);
-        Glide.with(mContext).asBitmap().load(activeModel.profile).into(head);
+        GlideApp.with(mContext).asBitmap().placeholder(R.mipmap.default_person_avatar)
+                .load(activeModel.profile).into(head);
 
 
         title.setText(activeModel.head);

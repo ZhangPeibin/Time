@@ -1,11 +1,16 @@
 package com.timeshow.app.activity;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.icu.text.IDNA;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,6 +24,7 @@ import com.timeshow.app.adapter.FriendAdapter;
 import com.timeshow.app.adapter.HistoryAdapter;
 import com.timeshow.app.model.HistoryModel;
 import com.timeshow.app.request.AddFriendService;
+import com.timeshow.app.request.DeleteFriendService;
 import com.timeshow.app.request.MyFriendService;
 import com.timeshow.app.request.TransactionHistoryService;
 import com.timeshow.app.request.Urls;
@@ -55,6 +61,10 @@ public class MyFriendActivity extends Activity {
     public TextView mTitle;
     @BindView(R.id.right_text)
     public TextView rightTitle;
+    @BindView(R.id.input)
+    public TextView input;
+
+    private List<String> oldData = new ArrayList<>();
 
     @Override
     protected void onCreate (@Nullable Bundle savedInstanceState) {
@@ -66,8 +76,46 @@ public class MyFriendActivity extends Activity {
         rightTitle.setVisibility(View.VISIBLE);
         TransferCoinTask transferCoinTask = new TransferCoinTask();
         transferCoinTask.execute();
-        mHistoryAdapter = new FriendAdapter(getApplicationContext());
+        mHistoryAdapter = new FriendAdapter(this);
         mListView.setAdapter(mHistoryAdapter);
+
+        input.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged (CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged (CharSequence s, int start, int before, int count) {
+                String search = s.toString();
+                if ( count == 0 ){
+                    mHistoryAdapter.notifyDataChanged(oldData);
+                }else{
+                    List<String> searchResult = new ArrayList<>();
+                    for ( String oldStr : oldData ){
+                        if ( search.equals(oldStr) ){
+                            searchResult.add(oldStr);
+                        }
+                    }
+                    mHistoryAdapter.notifyDataChanged(searchResult);
+                }
+            }
+
+            @Override
+            public void afterTextChanged (Editable s) {
+
+            }
+        });
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick (AdapterView<?> parent, View view, int position, long id) {
+                String a = (String) mHistoryAdapter.getItem(position);
+                Intent i = new Intent(MyFriendActivity.this,InformationActivity.class);
+                i.putExtra(InformationActivity.PHONE,a);
+                startActivity(i);
+            }
+        });
     }
 
     @OnClick (R.id.back )
@@ -105,6 +153,8 @@ public class MyFriendActivity extends Activity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                                TransferCoinTask transferCoinTask = new TransferCoinTask();
+                                transferCoinTask.execute();
                             }
 
                             @Override
@@ -115,6 +165,44 @@ public class MyFriendActivity extends Activity {
                     }
                 }).show();
     }
+
+    public void delete (String rphone) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Urls.BASE_URL).addConverterFactory(ScalarsConverterFactory.create() ).build();
+        DeleteFriendService loginRequest = retrofit.create(DeleteFriendService.class);
+        Call<String> request = loginRequest.add(SpUtils.get_str(getApplicationContext(),"token"),
+                rphone);
+        request.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse (Call<String> call, Response<String> response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body());
+                    int status = jsonObject.optInt("status");
+                    String message = jsonObject.optString("message");
+                    if ( status != 0 ){
+                        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                    }
+                    TransferCoinTask transferCoinTask = new TransferCoinTask();
+                    transferCoinTask.execute();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure (Call<String> call, Throwable t) {
+                Toast.makeText(getApplicationContext(),"服务器异常",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+
+
+
+
 
     public class TransferCoinTask extends AsyncTask<Void, Void, String> {
 
@@ -147,10 +235,16 @@ public class MyFriendActivity extends Activity {
                     }else{
                         JSONArray list = jsonObject.optJSONArray("list");
                         List<String> historyModels = new ArrayList<>();
+                        String phone = SpUtils.get_str(getApplicationContext(),"phone");
                         for (int i = 0;i<list.length();i++ ){
                             JSONObject j = list.optJSONObject(i);
-                            historyModels.add(j.optString("rphone"));
+                            String rphone = j.optString("rphone");
+                            if ( phone != null && !phone.equals(rphone) ){
+                                historyModels.add(j.optString("rphone"));
+                            }
                         }
+                        oldData.clear();
+                        oldData.addAll(historyModels);
                         mHistoryAdapter.notifyDataChanged(historyModels);
                     }
                 } catch (JSONException e) {

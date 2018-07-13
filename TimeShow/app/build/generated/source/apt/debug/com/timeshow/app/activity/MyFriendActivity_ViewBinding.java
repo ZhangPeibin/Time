@@ -19,7 +19,7 @@ public class MyFriendActivity_ViewBinding implements Unbinder {
 
   private View view2131296287;
 
-  private View view2131296484;
+  private View view2131296486;
 
   @UiThread
   public MyFriendActivity_ViewBinding(MyFriendActivity target) {
@@ -44,13 +44,14 @@ public class MyFriendActivity_ViewBinding implements Unbinder {
     target.mTitle = Utils.findRequiredViewAsType(source, R.id.title, "field 'mTitle'", TextView.class);
     view = Utils.findRequiredView(source, R.id.right_text, "field 'rightTitle' and method 'add'");
     target.rightTitle = Utils.castView(view, R.id.right_text, "field 'rightTitle'", TextView.class);
-    view2131296484 = view;
+    view2131296486 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
         target.add(p0);
       }
     });
+    target.input = Utils.findRequiredViewAsType(source, R.id.input, "field 'input'", TextView.class);
   }
 
   @Override
@@ -64,10 +65,11 @@ public class MyFriendActivity_ViewBinding implements Unbinder {
     target.mImageView = null;
     target.mTitle = null;
     target.rightTitle = null;
+    target.input = null;
 
     view2131296287.setOnClickListener(null);
     view2131296287 = null;
-    view2131296484.setOnClickListener(null);
-    view2131296484 = null;
+    view2131296486.setOnClickListener(null);
+    view2131296486 = null;
   }
 }

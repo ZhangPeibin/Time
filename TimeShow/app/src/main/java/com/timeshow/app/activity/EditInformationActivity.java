@@ -48,6 +48,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class EditInformationActivity extends Activity implements PhotoObtainHelper.OnBitmapBackListener {
 
+
     @BindView ( R.id.title )
     public TextView title;
 

@@ -15,9 +15,9 @@ import java.lang.Override;
 public class MainActivity_ViewBinding implements Unbinder {
   private MainActivity target;
 
-  private View view2131296405;
+  private View view2131296407;
 
-  private View view2131296445;
+  private View view2131296447;
 
   @UiThread
   public MainActivity_ViewBinding(MainActivity target) {
@@ -32,7 +32,7 @@ public class MainActivity_ViewBinding implements Unbinder {
     target.mTitle = Utils.findRequiredViewAsType(source, R.id.title, "field 'mTitle'", TextView.class);
     view = Utils.findRequiredView(source, R.id.left_text, "field 'mLeftView' and method 'selectArea'");
     target.mLeftView = Utils.castView(view, R.id.left_text, "field 'mLeftView'", TextView.class);
-    view2131296405 = view;
+    view2131296407 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -41,7 +41,7 @@ public class MainActivity_ViewBinding implements Unbinder {
     });
     target.commonTitle = Utils.findRequiredView(source, R.id.common_title, "field 'commonTitle'");
     view = Utils.findRequiredView(source, R.id.navigation_center_image, "method 'addActive'");
-    view2131296445 = view;
+    view2131296447 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -61,9 +61,9 @@ public class MainActivity_ViewBinding implements Unbinder {
     target.mLeftView = null;
     target.commonTitle = null;
 
-    view2131296405.setOnClickListener(null);
-    view2131296405 = null;
-    view2131296445.setOnClickListener(null);
-    view2131296445 = null;
+    view2131296407.setOnClickListener(null);
+    view2131296407 = null;
+    view2131296447.setOnClickListener(null);
+    view2131296447 = null;
   }
 }

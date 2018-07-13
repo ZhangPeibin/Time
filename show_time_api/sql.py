@@ -256,6 +256,12 @@ class UserHelper(SqlHelper):
         self.__conn__.execute(sql, (phone, r_phone))
         self.__conn__.commit()
 
+    def delete_friend(self, phone, r_phone):
+        sql = "DELETE FROM %s where %s like '%s' and %s like '%s'" % (friend_table, Friend_column.PHONE, phone,
+                                                                      Friend_column.R_PHONE, r_phone)
+        self.__conn__.execute(sql)
+        self.__conn__.commit()
+
     def get_friend(self, phone):
         cur = self.__conn__.execute("SELECT * from %s where %s like '%s'" %
                                     (friend_table, Friend_column.PHONE, phone))

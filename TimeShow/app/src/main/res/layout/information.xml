@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/common_title_bar"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/account_online_grey_white"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/edit_photo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:text="头像"
+                android:textColor="#4a4a4a"
+                android:textSize="16sp" />
+
+            <com.timeshow.app.utils.CircleImgView
+                android:id="@+id/iconImg"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_toLeftOf="@+id/arrow"
+                android:src="@mipmap/default_person_avatar" />
+
+            <ImageView
+                android:id="@+id/arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:src="@mipmap/icon_more_right" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/edit_nick_name"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginTop="1dp"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:text="昵称"
+                android:textColor="#4a4a4a"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/nick_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="8dp"
+                android:layout_toLeftOf="@+id/right_arr"
+                android:hint="未设置昵称"
+                android:enabled="false"
+                android:background="@color/white"
+                android:textColor="#999999"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/right_arr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:visibility="invisible"
+                android:src="@mipmap/icon_more_right" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/edit_pay_card"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginTop="1dp"
+            android:background="@color/white"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:text="会员号"
+                android:textColor="#4a4a4a"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/pay_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="8dp"
+                android:layout_toLeftOf="@+id/right_arr_pay_card"
+                android:hint="未设置会员号"
+                android:enabled="false"
+                android:background="@color/white"
+                android:textColor="#999999"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/right_arr_pay_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:visibility="invisible"
+                android:src="@mipmap/icon_more_right" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/edit_infor_type"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginTop="1dp"
+            android:background="@color/white"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:text="身份类型"
+                android:textColor="#4a4a4a"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/infor_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="8dp"
+                android:layout_toLeftOf="@+id/right_arr_pay_type"
+                android:background="@color/white"
+                android:textColor="#999999"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/right_arr_pay_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:visibility="invisible"
+                android:src="@mipmap/icon_more_right" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/edit_own_description"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginTop="1dp"
+            android:background="@color/white"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:text="个人简介"
+                android:textColor="#4a4a4a"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="8dp"
+                android:layout_toLeftOf="@+id/right_arr_profile"
+                android:hint="未设置简介"
+                android:background="@color/white"
+                android:textColor="#999999"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/right_arr_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:visibility="invisible"
+                android:src="@mipmap/icon_more_right" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/edit_phone"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginTop="1dp"
+            android:background="@color/white"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:text="手机号"
+                android:textColor="#4a4a4a"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="8dp"
+                android:layout_toLeftOf="@+id/right_arr_phone"
+                android:hint="手机号"
+                android:background="@color/white"
+                android:textColor="#999999"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/right_arr_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:visibility="invisible"
+                android:src="@mipmap/icon_more_right" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/edit_card"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginTop="1dp"
+            android:background="@color/white"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:text="身份证号码"
+                android:textColor="#4a4a4a"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="8dp"
+                android:layout_toLeftOf="@+id/right_arr_card"
+                android:hint="未设置身份证号"
+                android:enabled="false"
+                android:background="@color/white"
+                android:textColor="#999999"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/right_arr_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:visibility="invisible"
+                android:src="@mipmap/icon_more_right" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

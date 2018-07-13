@@ -21,13 +21,13 @@ public class AddActiveActivity_ViewBinding implements Unbinder {
 
   private View view2131296279;
 
-  private View view2131296539;
+  private View view2131296543;
 
-  private View view2131296388;
+  private View view2131296389;
 
-  private View view2131296400;
+  private View view2131296402;
 
-  private View view2131296356;
+  private View view2131296357;
 
   @UiThread
   public AddActiveActivity_ViewBinding(AddActiveActivity target) {
@@ -63,7 +63,7 @@ public class AddActiveActivity_ViewBinding implements Unbinder {
     });
     view = Utils.findRequiredView(source, R.id.time, "field 'timeView' and method 'selectTime'");
     target.timeView = Utils.castView(view, R.id.time, "field 'timeView'", TextView.class);
-    view2131296539 = view;
+    view2131296543 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -72,7 +72,7 @@ public class AddActiveActivity_ViewBinding implements Unbinder {
     });
     view = Utils.findRequiredView(source, R.id.image, "field 'image' and method 'pickImage'");
     target.image = Utils.castView(view, R.id.image, "field 'image'", ImageView.class);
-    view2131296388 = view;
+    view2131296389 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -81,7 +81,7 @@ public class AddActiveActivity_ViewBinding implements Unbinder {
     });
     view = Utils.findRequiredView(source, R.id.kind, "field 'kindView' and method 'kind'");
     target.kindView = Utils.castView(view, R.id.kind, "field 'kindView'", TextView.class);
-    view2131296400 = view;
+    view2131296402 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -90,7 +90,7 @@ public class AddActiveActivity_ViewBinding implements Unbinder {
     });
     target.detailView = Utils.findRequiredViewAsType(source, R.id.details_address, "field 'detailView'", EditText.class);
     view = Utils.findRequiredView(source, R.id.email_sign_in_button, "method 'post'");
-    view2131296356 = view;
+    view2131296357 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -121,13 +121,13 @@ public class AddActiveActivity_ViewBinding implements Unbinder {
     view2131296287 = null;
     view2131296279.setOnClickListener(null);
     view2131296279 = null;
-    view2131296539.setOnClickListener(null);
-    view2131296539 = null;
-    view2131296388.setOnClickListener(null);
-    view2131296388 = null;
-    view2131296400.setOnClickListener(null);
-    view2131296400 = null;
-    view2131296356.setOnClickListener(null);
-    view2131296356 = null;
+    view2131296543.setOnClickListener(null);
+    view2131296543 = null;
+    view2131296389.setOnClickListener(null);
+    view2131296389 = null;
+    view2131296402.setOnClickListener(null);
+    view2131296402 = null;
+    view2131296357.setOnClickListener(null);
+    view2131296357 = null;
   }
 }

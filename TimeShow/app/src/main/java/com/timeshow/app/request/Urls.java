@@ -5,7 +5,7 @@ package com.timeshow.app.request;
  */
 
 public interface Urls {
-    String BASE_URL = "http://192.168.1.105:5000";
+    String BASE_URL = "http://192.168.1.146:5000";
 //    String BASE_URL = "http://1.58.73.150:10500";
 
 }

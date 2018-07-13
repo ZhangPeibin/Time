@@ -19,7 +19,7 @@ public class TransferActivity_ViewBinding implements Unbinder {
 
   private View view2131296287;
 
-  private View view2131296356;
+  private View view2131296357;
 
   @UiThread
   public TransferActivity_ViewBinding(TransferActivity target) {
@@ -44,7 +44,7 @@ public class TransferActivity_ViewBinding implements Unbinder {
     target.mCount = Utils.findRequiredViewAsType(source, R.id.password, "field 'mCount'", EditText.class);
     target.mTitle = Utils.findRequiredViewAsType(source, R.id.title, "field 'mTitle'", TextView.class);
     view = Utils.findRequiredView(source, R.id.email_sign_in_button, "method 'transfer'");
-    view2131296356 = view;
+    view2131296357 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -67,7 +67,7 @@ public class TransferActivity_ViewBinding implements Unbinder {
 
     view2131296287.setOnClickListener(null);
     view2131296287 = null;
-    view2131296356.setOnClickListener(null);
-    view2131296356 = null;
+    view2131296357.setOnClickListener(null);
+    view2131296357 = null;
   }
 }

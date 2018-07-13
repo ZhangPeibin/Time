@@ -1,10 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:clearText="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff">
     <include layout="@layout/common_title_bar"/>
+    <RelativeLayout
+        android:id="@+id/search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:background="#f0f4fa">
 
+        <com.timeshow.app.utils.ClearEditText
+            android:id="@+id/input"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dip"
+            android:background="@drawable/common_grey_stroke_halfdip"
+            android:hint="搜索手机号"
+            android:maxLength="50"
+            android:paddingLeft="40dip"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            clearText:src="@mipmap/clear_edit_delete" />
+
+        <FrameLayout
+            android:layout_width="20dip"
+            android:layout_height="20dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dip">
+
+            <ImageView
+                android:id="@+id/search_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@mipmap/ic_option_search" />
+
+        </FrameLayout>
+
+    </RelativeLayout>
     <ListView
         android:id="@+id/listview"
         android:layout_width="match_parent"

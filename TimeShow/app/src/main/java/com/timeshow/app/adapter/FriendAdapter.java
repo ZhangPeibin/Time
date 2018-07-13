@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.timeshow.app.R;
+import com.timeshow.app.activity.MyFriendActivity;
 import com.timeshow.app.model.HistoryModel;
 
 import java.util.ArrayList;
@@ -18,12 +19,14 @@ import java.util.List;
  * Created by peibin on 18-2-14.
  */
 
-public class FriendAdapter extends BaseAdapter {
+public class FriendAdapter extends BaseAdapter implements View.OnClickListener {
 
+    private MyFriendActivity mMyFriendActivity;
     private LayoutInflater mLayoutInflater;
     private List<String> mHistoryModels ;
 
-    public FriendAdapter (Context context){
+    public FriendAdapter (MyFriendActivity context){
+        this.mMyFriendActivity = context;
         mLayoutInflater = LayoutInflater.from(context);
         mHistoryModels = new ArrayList<>();
     }
@@ -45,9 +48,13 @@ public class FriendAdapter extends BaseAdapter {
 
     @Override
     public View getView (int position, View convertView, ViewGroup parent) {
-        View view  = mLayoutInflater.inflate(R.layout.history_item,parent,false);
+        View view  = mLayoutInflater.inflate(R.layout.friend_item,parent,false);
         TextView textView = (TextView) view.findViewById(R.id.title);
         TextView countTv = (TextView) view.findViewById(R.id.count);
+        TextView delete = (TextView) view.findViewById(R.id.delete);
+        delete.setTag(mHistoryModels.get(position));
+        delete.setOnClickListener(this);
+
         String historyModel = mHistoryModels.get(position);
         textView.setText("手机号");
         countTv.setText(historyModel);
@@ -60,5 +67,11 @@ public class FriendAdapter extends BaseAdapter {
         mHistoryModels.addAll(historyModels);
         Collections.reverse(mHistoryModels);
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClick (View v) {
+        String rphone = v.getTag().toString();
+        mMyFriendActivity.delete(rphone);
     }
 }

@@ -16,23 +16,23 @@ import java.lang.Override;
 public class HomeFragment_ViewBinding implements Unbinder {
   private HomeFragment target;
 
+  private View view2131296376;
+
+  private View view2131296488;
+
+  private View view2131296489;
+
   private View view2131296375;
 
-  private View view2131296486;
+  private View view2131296510;
 
-  private View view2131296487;
+  private View view2131296557;
 
-  private View view2131296374;
+  private View view2131296544;
 
-  private View view2131296506;
+  private View view2131296496;
 
-  private View view2131296553;
-
-  private View view2131296540;
-
-  private View view2131296494;
-
-  private View view2131296541;
+  private View view2131296545;
 
   @UiThread
   public HomeFragment_ViewBinding(final HomeFragment target, View source) {
@@ -45,7 +45,7 @@ public class HomeFragment_ViewBinding implements Unbinder {
     target.time = Utils.findRequiredViewAsType(source, R.id.time, "field 'time'", TextView.class);
     target.mBanner = Utils.findRequiredViewAsType(source, R.id.banner, "field 'mBanner'", Banner.class);
     view = Utils.findRequiredView(source, R.id.get, "method 'get'");
-    view2131296375 = view;
+    view2131296376 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -53,7 +53,7 @@ public class HomeFragment_ViewBinding implements Unbinder {
       }
     });
     view = Utils.findRequiredView(source, R.id.save, "method 'save'");
-    view2131296486 = view;
+    view2131296488 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -61,7 +61,7 @@ public class HomeFragment_ViewBinding implements Unbinder {
       }
     });
     view = Utils.findRequiredView(source, R.id.scan, "method 'onScan'");
-    view2131296487 = view;
+    view2131296489 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -69,7 +69,7 @@ public class HomeFragment_ViewBinding implements Unbinder {
       }
     });
     view = Utils.findRequiredView(source, R.id.fushijian, "method 'fushijian'");
-    view2131296374 = view;
+    view2131296375 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -77,7 +77,7 @@ public class HomeFragment_ViewBinding implements Unbinder {
       }
     });
     view = Utils.findRequiredView(source, R.id.shoushijian, "method 'shoushijian'");
-    view2131296506 = view;
+    view2131296510 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -85,7 +85,7 @@ public class HomeFragment_ViewBinding implements Unbinder {
       }
     });
     view = Utils.findRequiredView(source, R.id.translate, "method 'translate'");
-    view2131296553 = view;
+    view2131296557 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -93,7 +93,7 @@ public class HomeFragment_ViewBinding implements Unbinder {
       }
     });
     view = Utils.findRequiredView(source, R.id.timeget, "method 'timeget'");
-    view2131296540 = view;
+    view2131296544 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -101,7 +101,7 @@ public class HomeFragment_ViewBinding implements Unbinder {
       }
     });
     view = Utils.findRequiredView(source, R.id.search_badge, "method 'searchBadge'");
-    view2131296494 = view;
+    view2131296496 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -109,7 +109,7 @@ public class HomeFragment_ViewBinding implements Unbinder {
       }
     });
     view = Utils.findRequiredView(source, R.id.timme_money, "method 'timme_money'");
-    view2131296541 = view;
+    view2131296545 = view;
     view.setOnClickListener(new DebouncingOnClickListener() {
       @Override
       public void doClick(View p0) {
@@ -131,23 +131,23 @@ public class HomeFragment_ViewBinding implements Unbinder {
     target.time = null;
     target.mBanner = null;
 
+    view2131296376.setOnClickListener(null);
+    view2131296376 = null;
+    view2131296488.setOnClickListener(null);
+    view2131296488 = null;
+    view2131296489.setOnClickListener(null);
+    view2131296489 = null;
     view2131296375.setOnClickListener(null);
     view2131296375 = null;
-    view2131296486.setOnClickListener(null);
-    view2131296486 = null;
-    view2131296487.setOnClickListener(null);
-    view2131296487 = null;
-    view2131296374.setOnClickListener(null);
-    view2131296374 = null;
-    view2131296506.setOnClickListener(null);
-    view2131296506 = null;
-    view2131296553.setOnClickListener(null);
-    view2131296553 = null;
-    view2131296540.setOnClickListener(null);
-    view2131296540 = null;
-    view2131296494.setOnClickListener(null);
-    view2131296494 = null;
-    view2131296541.setOnClickListener(null);
-    view2131296541 = null;
+    view2131296510.setOnClickListener(null);
+    view2131296510 = null;
+    view2131296557.setOnClickListener(null);
+    view2131296557 = null;
+    view2131296544.setOnClickListener(null);
+    view2131296544 = null;
+    view2131296496.setOnClickListener(null);
+    view2131296496 = null;
+    view2131296545.setOnClickListener(null);
+    view2131296545 = null;
   }
 }

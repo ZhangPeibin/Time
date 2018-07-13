@@ -621,7 +621,10 @@ def save_active():
     time = request.args['time']
     url = request.args['url']
     active_type = request.args['kind']
-    active_id = request.args['id']
+    if 'id' not in request.args:
+        active_id = None
+    else:
+        active_id = request.args['id']
     db = sql.UserHelper()
     user = db.get_user_by_token(str(token))
     if len(user) == 0:
@@ -632,11 +635,11 @@ def save_active():
     phone = user[0]
     if active_id is not None:
         db.update_active(active_id, phone, title, profile, cost, address, detail_address, time, url, active_type)
-        error = {"status": 0, "message": u"添加活动成功"}
+        error = {"status": 0, "message": u"更新活动成功"}
         resp = jsonify(error)
     else:
         db.save_active(phone, title, profile, cost, address, detail_address, time, url, active_type)
-        error = {"status": 0, "message": u"更新活动成功"}
+        error = {"status": 0, "message": u"添加活动成功"}
         resp = jsonify(error)
     return resp
 
@@ -770,9 +773,43 @@ def user_add_friend():
         return resp
 
     db.save_friend(phone, rphone)
-    db.save_friend(phone,phone)
+    db.save_friend(phone, phone)
 
     error = {"status": 0, "message": u"添加好友成功"}
+    resp = jsonify(error)
+    return resp
+
+
+@app.route("/user/deletefriend", methods=['GET'])
+def user_delete_friend():
+    if "token" not in request.args:
+        error = {"status": -1, "message": u"非法请求(未找到token字段)"}
+        resp = jsonify(error)
+        return resp
+
+    if "rphone" not in request.args:
+        error = {"status": -1, "message": u"非法请求(未找到phone字段)"}
+        resp = jsonify(error)
+        return resp
+
+    token = request.args['token']
+    rphone = request.args['rphone']
+    db = sql.UserHelper()
+    user = db.get_user_by_token(str(token))
+    if len(user) == 0:
+        error = {"status": -2, "message": u"用户不存在,请重新登录"}
+        resp = jsonify(error)
+        return resp
+    user = user[0]
+    phone = user[0]
+    # if phone == rphone:
+    #     error = {"status": -1, "message": u"不能自己添加自己为好友"}
+    #     resp = jsonify(error)
+    #     return resp
+
+    db.delete_friend(phone, rphone)
+
+    error = {"status": 0, "message": u"删除好友成功"}
     resp = jsonify(error)
     return resp
 

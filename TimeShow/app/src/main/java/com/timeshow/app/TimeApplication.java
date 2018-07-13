@@ -2,12 +2,13 @@ package com.timeshow.app;
 
 import android.app.Application;
 
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
 import com.timeshow.app.model.ActiveModel;
 
 /**
  * Created by peibin on 18-6-16.
  */
-
 public class TimeApplication extends Application {
 
     private static TimeApplication instance;
