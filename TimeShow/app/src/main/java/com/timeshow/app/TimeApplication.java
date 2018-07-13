@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.module.AppGlideModule;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.timeshow.app.model.ActiveModel;
 
 /**
@@ -33,5 +34,7 @@ public class TimeApplication extends Application {
     public void onCreate () {
         super.onCreate();
         instance = this;
+        CrashReport.initCrashReport(getApplicationContext(), "e29540baa4", true);
+
     }
 }

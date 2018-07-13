@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 
+import com.tencent.bugly.Bugly;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.timeshow.app.R;
 import com.timeshow.app.utils.SpUtils;
 
@@ -24,6 +26,7 @@ public class SplashActivity extends Activity implements Runnable {
         }else{
             mHandler.postDelayed(this,0);
         }
+
     }
 
     @Override
